@@ -127,21 +127,41 @@ export default function Home() {
       <section className="space-y-4">
         <h2 className="text-xl font-bold text-text-dark">Recent Updates</h2>
         <div className="space-y-4">
-          {[1, 2].map((update) => (
-            <div key={update} className="bg-white p-4 rounded-xl shadow-md">
+          {[
+            {
+              id: 1,
+              image: "/gym-update-1.png",
+              title: "New Equipment Update",
+              time: "2 hours ago",
+              description:
+                "New routes just set in the bouldering area! Come check them out!",
+            },
+            {
+              id: 2,
+              image: "/gym-update-2.png",
+              title: "Climbing Wall Update",
+              time: "4 hours ago",
+              description: "Added new training equipment in the weight room!",
+            },
+          ].map((update) => (
+            <div key={update.id} className="bg-white p-4 rounded-xl shadow-md">
               <div className="space-y-3">
-                <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-gray-200" />
-                  <div className="ml-3">
-                    <p className="font-medium text-primary">
-                      Gym Update {update}
-                    </p>
-                    <p className="text-sm text-text-muted">2 hours ago</p>
+                <div className="flex items-center gap-4">
+                  <div className="relative w-16 h-16 rounded-lg overflow-hidden">
+                    <Image
+                      src={update.image}
+                      alt={update.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-medium text-primary">{update.title}</p>
+                    <p className="text-sm text-text-muted">{update.time}</p>
                   </div>
                 </div>
                 <p className="text-text-dark">
-                  New routes just set in the bouldering area! Come check them
-                  out! <span className="text-accent">🧗‍♂️</span>
+                  {update.description} <span className="text-accent">🧗‍♂️</span>
                 </p>
               </div>
             </div>
