@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { getGymLogo } from "@/utils/gymImages";
 
 interface Gym {
   id: number;
@@ -17,20 +18,6 @@ interface Gym {
   };
   imageUrl: string;
 }
-
-const getGymLogo = (gymName: string): string => {
-  const name = gymName.toLowerCase();
-  if (name.includes("vertical world")) {
-    return "/vertical-world-logo.png";
-  }
-  if (name.includes("seattle boulder") || name.includes("sbp")) {
-    return "/seattle-boulder-project-logo.png";
-  }
-  if (name.includes("boulder district")) {
-    return "/boulder-district-logo.png";
-  }
-  return "";
-};
 
 export default function Home() {
   const router = useRouter();
@@ -58,8 +45,8 @@ export default function Home() {
     fetchGyms();
   }, []);
 
-  const handleGymClick = (gymId: number) => {
-    router.push(`/gym/${gymId}`);
+  const handleGymClick = (gym: Gym) => {
+    router.push(`/gym/${encodeURIComponent(gym.name)}`);
   };
 
   return (
@@ -79,7 +66,7 @@ export default function Home() {
             return (
               <div
                 key={gym.id}
-                onClick={() => handleGymClick(gym.id)}
+                onClick={() => handleGymClick(gym)}
                 className="bg-white rounded-xl shadow-md overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer"
               >
                 <div className="flex p-4 gap-4 items-center">
@@ -107,7 +94,7 @@ export default function Home() {
                         className="text-accent hover:text-accent/90 text-sm font-medium"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleGymClick(gym.id);
+                          handleGymClick(gym);
                         }}
                       >
                         View Profile →

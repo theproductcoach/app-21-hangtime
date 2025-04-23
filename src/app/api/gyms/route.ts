@@ -12,7 +12,12 @@ const mockGyms = [
       close: "11:00 PM"
     },
     imageUrl: "/images/gym1.jpg",
-    facilities: ['moonboard', 'cafe', 'weights', 'showers', 'lockers']
+    facilities: ['moonboard', 'cafe', 'weights', 'showers', 'lockers'],
+    stats: {
+      visitCount: 42,
+      climbCount: 378,
+      lastVisited: "2024-03-15"
+    }
   },
   {
     id: 2,
@@ -25,7 +30,12 @@ const mockGyms = [
       close: "10:00 PM"
     },
     imageUrl: "/images/gym2.jpg",
-    facilities: ['training', 'yoga', 'weights', 'showers', 'lockers', 'sauna']
+    facilities: ['training', 'yoga', 'weights', 'showers', 'lockers', 'sauna'],
+    stats: {
+      visitCount: 28,
+      climbCount: 196,
+      lastVisited: "2024-03-10"
+    }
   },
   {
     id: 3,
@@ -38,11 +48,17 @@ const mockGyms = [
       close: "11:00 PM"
     },
     imageUrl: "/images/gym3.jpg",
-    facilities: ['moonboard', 'cafe', 'yoga', 'training', 'showers', 'lockers']
+    facilities: ['moonboard', 'cafe', 'yoga', 'training', 'showers', 'lockers'],
+    stats: {
+      visitCount: 35,
+      climbCount: 245,
+      lastVisited: "2024-03-12"
+    }
   }
 ];
 
 export async function GET() {
+  console.log('API: Sending gyms:', mockGyms);
   // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 1000));
   

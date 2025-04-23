@@ -3,6 +3,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { TrophyIcon } from "@heroicons/react/24/solid";
+import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
+import {
+  markGymVisit,
+  logClimb,
+  isGymVisited,
+  getGymVisitCount,
+  getGymClimbCount,
+} from "@/utils/gymStats";
+import { getGymLogo } from "@/utils/gymImages";
 
 interface GymCardProps {
   gym: {
@@ -25,28 +35,21 @@ interface GymCardProps {
   }[];
 }
 
-const getGymLogo = (gymName: string): string => {
-  const name = gymName.toLowerCase();
-  if (name.includes("vertical world")) {
-    return "/vertical-world-logo.png";
-  }
-  if (name.includes("seattle boulder") || name.includes("sbp")) {
-    return "/seattle-boulder-project-logo.png";
-  }
-  if (name.includes("boulder district")) {
-    return "/boulder-district-logo.png";
-  }
-  return "";
-};
-
 export default function GymCard({ gym, facilities }: GymCardProps) {
   const router = useRouter();
   const [isHomeGym, setIsHomeGym] = useState(false);
+  const [isVisited, setIsVisited] = useState(false);
+  const [visitCount, setVisitCount] = useState(0);
+  const [climbCount, setClimbCount] = useState(0);
+  const [showClimbCounter, setShowClimbCounter] = useState(false);
   const logoPath = getGymLogo(gym.name);
 
   useEffect(() => {
     const homeGymId = localStorage.getItem("homeGymId");
     setIsHomeGym(homeGymId === gym.id.toString());
+    setIsVisited(isGymVisited(gym.id.toString()));
+    setVisitCount(getGymVisitCount(gym.id.toString()));
+    setClimbCount(getGymClimbCount(gym.id.toString()));
   }, [gym.id]);
 
   const handleSetHomeGym = () => {
@@ -61,8 +64,20 @@ export default function GymCard({ gym, facilities }: GymCardProps) {
     setIsHomeGym(true);
   };
 
+  const handleMarkVisited = () => {
+    const visit = markGymVisit(gym.id.toString(), gym.name);
+    setIsVisited(true);
+    setVisitCount(visit.visitCount);
+    setShowClimbCounter(true);
+  };
+
+  const handleLogClimb = () => {
+    const stats = logClimb(gym.id.toString());
+    setClimbCount(stats.climbCount);
+  };
+
   const handleViewGym = () => {
-    router.push(`/gym/${gym.id}`);
+    router.push(`/gym/${encodeURIComponent(gym.name)}`);
   };
 
   return (
@@ -70,9 +85,14 @@ export default function GymCard({ gym, facilities }: GymCardProps) {
       {/* Header Section */}
       <div className="px-4 py-3 border-b border-gray-100">
         <div className="flex justify-between items-start">
-          <h3 className="text-lg font-semibold text-primary truncate pr-2">
-            {gym.name}
-          </h3>
+          <div className="flex items-start gap-2">
+            <h3 className="text-lg font-semibold text-primary truncate pr-2">
+              {gym.name}
+            </h3>
+            {isVisited && (
+              <TrophyIcon className="h-5 w-5 text-yellow-400 flex-shrink-0" />
+            )}
+          </div>
           {isHomeGym && (
             <span className="inline-flex items-center bg-accent/10 text-accent rounded-full px-2 py-1 text-sm">
               🏠 Home Gym
@@ -115,6 +135,14 @@ export default function GymCard({ gym, facilities }: GymCardProps) {
               </div>
               <span className="mx-2 text-gray-300">•</span>
               <span className="text-text-muted">{gym.distance} miles</span>
+              {isVisited && (
+                <>
+                  <span className="mx-2 text-gray-300">•</span>
+                  <span className="text-text-muted">
+                    {visitCount} visit{visitCount !== 1 ? "s" : ""}
+                  </span>
+                </>
+              )}
             </div>
 
             {/* Hours */}
@@ -149,6 +177,26 @@ export default function GymCard({ gym, facilities }: GymCardProps) {
           </div>
         </div>
 
+        {/* Climb Counter */}
+        {showClimbCounter && (
+          <div className="mt-4 pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-text-muted">
+                Climbs today:{" "}
+                <span className="font-medium text-primary">{climbCount}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleLogClimb}
+                  className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                >
+                  <PlusIcon className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Action Buttons */}
         <div className="flex justify-end items-center gap-2 mt-4 pt-3 border-t border-gray-100">
           {!isHomeGym && (
@@ -157,6 +205,14 @@ export default function GymCard({ gym, facilities }: GymCardProps) {
               className="text-accent hover:text-accent/90 px-3 py-1.5 text-sm font-medium transition-colors"
             >
               Set as Home
+            </button>
+          )}
+          {!isVisited && (
+            <button
+              onClick={handleMarkVisited}
+              className="text-primary hover:text-primary/90 px-3 py-1.5 text-sm font-medium transition-colors"
+            >
+              Mark Visited
             </button>
           )}
           <button
