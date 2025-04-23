@@ -128,6 +128,35 @@ export default function Home() {
         </div>
       )}
 
+      {/* Hangtime+ Promo Banner */}
+      <div
+        onClick={() => router.push("/perks")}
+        className="bg-gradient-to-l from-background-soft via-pink-100 to-pink-50 rounded-xl shadow-md p-6 cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+      >
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🏆</span>
+              <h2 className="text-xl font-bold text-text-dark">
+                Get Hangtime+
+              </h2>
+            </div>
+            <p className="text-gray-600 max-w-md">
+              Unlock free gym passes, coffees, and more.
+            </p>
+          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push("/perks");
+            }}
+            className="bg-accent text-white px-4 py-2 text-sm rounded-md hover:bg-accent/90 transition-colors font-medium whitespace-nowrap"
+          >
+            View Perks →
+          </button>
+        </div>
+      </div>
+
       <section className="space-y-4">
         <h2 className="text-xl font-bold text-text-dark">Recent Updates</h2>
         <div className="space-y-4">

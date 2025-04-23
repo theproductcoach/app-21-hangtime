@@ -6,7 +6,7 @@ export interface UserProfile {
 }
 
 const DEFAULT_PROFILE: UserProfile = {
-  displayName: "Climber123",
+  displayName: "Jane Smith",
   avatar: "🧗",
   homeGymId: null,
   joinDate: new Date().toISOString()
