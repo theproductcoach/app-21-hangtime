@@ -57,7 +57,11 @@ export default function Directory() {
         setGyms(data);
         setError(null);
       } catch (err) {
-        setError("Failed to load gyms");
+        setError(
+          `Failed to load gyms: ${
+            err instanceof Error ? err.message : "Unknown error"
+          }`
+        );
       } finally {
         setIsLoading(false);
       }

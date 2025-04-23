@@ -1,7 +1,13 @@
 import { Suspense } from "react";
 import GymProfileContent from "@/components/GymProfileContent";
 
-export default function GymProfile({ params }: { params: { name: string } }) {
+interface PageProps {
+  params: Promise<{ name: string }>;
+}
+
+export default async function GymProfile({ params }: PageProps) {
+  const { name } = await params;
+
   return (
     <Suspense
       fallback={
@@ -10,7 +16,7 @@ export default function GymProfile({ params }: { params: { name: string } }) {
         </div>
       }
     >
-      <GymProfileContent gymId={params.name} />
+      <GymProfileContent gymId={name} />
     </Suspense>
   );
 } 

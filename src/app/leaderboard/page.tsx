@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Tab } from "@headlessui/react";
-import Image from "next/image";
 import { TrophyIcon, GlobeAltIcon } from "@heroicons/react/24/outline";
 
 interface LeaderboardUser {
@@ -168,7 +167,7 @@ export default function LeaderboardPage() {
     }
 
     return filteredUsers.sort((a, b) => {
-      switch (category) {
+      switch (categories[selectedCategory].id) {
         case "climbs":
           return b.totalClimbs - a.totalClimbs;
         case "visits":

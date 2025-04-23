@@ -62,13 +62,21 @@ export default function ProfilePage() {
   const [totalVisits, setTotalVisits] = useState(105);
   const [totalClimbs, setTotalClimbs] = useState(359);
   const [recentVisits, setRecentVisits] = useState<GymVisit[]>(MOCK_VISITS);
-  const [userProfile, setUserProfile] = useState<UserProfile>(getUserProfile());
-  const [homeGymData, setHomeGymData] = useState<HomeGymData | null>(
-    getHomeGymData()
-  );
+  const [userProfile, setUserProfile] = useState<UserProfile>({
+    displayName: "Climber",
+    avatar: "🧗",
+    joinDate: new Date().toISOString(),
+    homeGymId: null
+  });
+  const [homeGymData, setHomeGymData] = useState<HomeGymData | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
+    // Load user profile and home gym data after component mounts
+    setUserProfile(getUserProfile());
+    setHomeGymData(getHomeGymData());
+
+    // Load gym stats
     const stats = getGymStats();
     const visits = Object.values(stats.visits);
 

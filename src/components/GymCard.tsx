@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { TrophyIcon } from "@heroicons/react/24/solid";
-import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import {
   markGymVisit,
   logClimb,
