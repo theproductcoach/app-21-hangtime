@@ -4,6 +4,25 @@ Hangtime is a modern web application that helps climbers discover and connect wi
 
 ## ✨ Features
 
+### ⭐ Hangtime+
+
+Premium membership with exclusive perks:
+
+- 🎟️ Free monthly day pass to partner gyms
+- ☕ Monthly coffee or snack at gym cafes
+- 🧗 25% off private coaching sessions
+- 📚 Discounted climbing courses
+- 📊 Advanced climbing stats and trends
+- 🏅 Custom profile badges
+- 🚀 Early access to new features
+
+Flexible pricing:
+
+- Monthly: $4.99
+- Yearly: $49.99 (Save 17%)
+- 7-day free trial
+- Cancel anytime
+
 ### 🏢 Gym Directory
 
 - Browse a comprehensive list of climbing gyms
@@ -101,6 +120,7 @@ The app is built with a mobile-first approach, featuring:
 - Route tracking and grading
 - Community reviews and ratings
 - Integration with climbing apps
+- Additional Hangtime+ perks and rewards
 
 ## 📄 License
 
