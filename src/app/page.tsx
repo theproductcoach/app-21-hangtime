@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 interface Gym {
   id: number;
@@ -16,7 +18,22 @@ interface Gym {
   imageUrl: string;
 }
 
+const getGymLogo = (gymName: string): string => {
+  const name = gymName.toLowerCase();
+  if (name.includes("vertical world")) {
+    return "/vertical-world-logo.png";
+  }
+  if (name.includes("seattle boulder") || name.includes("sbp")) {
+    return "/seattle-boulder-project-logo.png";
+  }
+  if (name.includes("boulder district")) {
+    return "/boulder-district-logo.png";
+  }
+  return "";
+};
+
 export default function Home() {
+  const router = useRouter();
   const [gyms, setGyms] = useState<Gym[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +58,10 @@ export default function Home() {
     fetchGyms();
   }, []);
 
+  const handleGymClick = (gymId: number) => {
+    router.push(`/gym/${gymId}`);
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 space-y-8">
       <h1 className="text-xl font-bold text-text-dark">Featured Gyms</h1>
@@ -53,32 +74,66 @@ export default function Home() {
         </div>
       ) : (
         <div className="space-y-4">
-          {gyms.map((gym) => (
-            <div
-              key={gym.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
-            >
-              <div className="p-4 space-y-3">
-                <h3 className="font-semibold text-lg text-primary">
-                  {gym.name}
-                </h3>
-                <p className="flex items-center text-text-muted text-sm">
-                  <span className="text-accent mr-1">📍</span>
-                  {gym.location} • {gym.distance} miles away
-                </p>
-                <div className="flex items-center text-sm">
-                  <span className="flex items-center text-accent">
-                    ⭐{" "}
-                    <span className="ml-1 text-text-muted">{gym.rating}</span>
-                  </span>
-                  <span className="mx-2 text-text-muted">•</span>
-                  <span className="text-primary">
-                    Open {gym.hours.open} - {gym.hours.close}
-                  </span>
+          {gyms.map((gym) => {
+            const logoPath = getGymLogo(gym.name);
+            return (
+              <div
+                key={gym.id}
+                onClick={() => handleGymClick(gym.id)}
+                className="bg-white rounded-xl shadow-md overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer"
+              >
+                <div className="flex p-4 gap-4 items-center">
+                  <div className="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-white rounded-lg">
+                    {logoPath ? (
+                      <Image
+                        src={logoPath}
+                        alt={`${gym.name} Logo`}
+                        width={64}
+                        height={64}
+                        className="object-contain p-1"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center text-2xl">
+                        🧗
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-grow min-w-0 space-y-3">
+                    <div className="flex justify-between items-start">
+                      <h3 className="font-semibold text-lg text-primary">
+                        {gym.name}
+                      </h3>
+                      <button
+                        className="text-accent hover:text-accent/90 text-sm font-medium"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleGymClick(gym.id);
+                        }}
+                      >
+                        View Profile →
+                      </button>
+                    </div>
+                    <p className="flex items-center text-text-muted text-sm">
+                      <span className="text-accent mr-1">📍</span>
+                      {gym.location} • {gym.distance} miles away
+                    </p>
+                    <div className="flex items-center text-sm">
+                      <span className="flex items-center text-accent">
+                        ⭐{" "}
+                        <span className="ml-1 text-text-muted">
+                          {gym.rating}
+                        </span>
+                      </span>
+                      <span className="mx-2 text-text-muted">•</span>
+                      <span className="text-primary">
+                        Open {gym.hours.open} - {gym.hours.close}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

@@ -1,10 +1,31 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 
+interface HomeGymData {
+  name: string;
+  location: string;
+}
+
 export default function Profile() {
+  const [homeGym, setHomeGym] = useState<HomeGymData | null>(null);
+
+  useEffect(() => {
+    const homeGymData = localStorage.getItem("homeGymData");
+    if (homeGymData) {
+      setHomeGym(JSON.parse(homeGymData));
+    }
+  }, []);
+
+  const handleClearHomeGym = () => {
+    localStorage.removeItem("homeGymId");
+    localStorage.removeItem("homeGymData");
+    setHomeGym(null);
+  };
+
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-6 max-w-2xl">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-text-dark">Profile</h1>
         <button className="p-2 hover:bg-white rounded-full text-text-muted hover:text-text-dark transition-colors">
@@ -37,16 +58,31 @@ export default function Profile() {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-        <h3 className="font-semibold mb-4 text-text-dark">Home Gym</h3>
-        <div className="flex items-center">
-          <div className="w-16 h-16 bg-gray-200 rounded-lg" />
-          <div className="ml-4">
-            <h4 className="font-medium text-text-dark">Boulder Zone</h4>
-            <p className="text-sm text-text-muted">📍 123 Climb Street</p>
-            <p className="text-sm text-primary mt-1">Open until 10 PM</p>
+      <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+        <h2 className="text-lg font-semibold text-text-dark mb-4">Home Gym</h2>
+
+        {homeGym ? (
+          <div className="space-y-4">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">🏠</span>
+              <div>
+                <h3 className="font-medium text-primary">{homeGym.name}</h3>
+                <p className="text-sm text-text-muted">{homeGym.location}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={handleClearHomeGym}
+              className="text-accent hover:text-accent/90 text-sm font-medium transition-colors"
+            >
+              Change Home Gym
+            </button>
           </div>
-        </div>
+        ) : (
+          <p className="text-text-muted">
+            No home gym set. Visit the directory to set your home gym!
+          </p>
+        )}
       </div>
 
       <div className="space-y-4">
